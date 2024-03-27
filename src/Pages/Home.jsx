@@ -8,13 +8,13 @@ import {
   HomeIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
-  //   { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: "Expense", href: "/expense", icon: DocumentDuplicateIcon, current: false },
-  { name: "Reports", href: "/reports", icon: ChartPieIcon, current: false },
+  { name: "Dashboard", href: "/", icon: HomeIcon },
+  { name: "Expense Categories", href: "/budget", icon: CalendarIcon },
+  { name: "Expense", href: "/expense", icon: DocumentDuplicateIcon },
+  { name: "Reports", href: "/reports", icon: ChartPieIcon },
 ];
 
 function classNames(...classes) {
@@ -23,7 +23,10 @@ function classNames(...classes) {
 
 const Home = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeNav, setActiveNav] = useState("Dashboard");
+  const [activeNav, setActiveNav] = useState("");
+  const location = useLocation();
+  const { pathname } = location;
+  // console.log(pathname);
   return (
     <>
       {/*
@@ -102,10 +105,10 @@ const Home = () => {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <a
-                                  href={item.href}
+                                <Link
+                                  to={item.href}
                                   className={classNames(
-                                    item.current
+                                    item.href === pathname
                                       ? "bg-gray-50 text-green-600"
                                       : "text-gray-700 hover:text-green-600 hover:bg-gray-50",
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
@@ -113,7 +116,7 @@ const Home = () => {
                                 >
                                   <item.icon
                                     className={classNames(
-                                      item.current
+                                      item.href === pathname
                                         ? "text-green-600"
                                         : "text-gray-400 group-hover:text-green-600",
                                       "h-6 w-6 shrink-0"
@@ -121,7 +124,7 @@ const Home = () => {
                                     aria-hidden="true"
                                   />
                                   {item.name}
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -158,7 +161,7 @@ const Home = () => {
                           to={item.href}
                           onClick={() => setActiveNav(item.name)}
                           className={classNames(
-                            item.name === activeNav
+                            item.href === pathname
                               ? "bg-gray-50 text-green-600"
                               : "text-gray-700 hover:text-green-600 hover:bg-gray-50",
                             "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
@@ -166,7 +169,7 @@ const Home = () => {
                         >
                           <item.icon
                             className={classNames(
-                              item.name === activeNav
+                              item.href === pathname
                                 ? "text-green-600"
                                 : "text-gray-400 group-hover:text-green-600",
                               "h-6 w-6 shrink-0"
