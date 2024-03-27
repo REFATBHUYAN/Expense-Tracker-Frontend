@@ -1,4 +1,5 @@
 import React from "react";
+import AllExpense from "../Components/AllExpense";
 
 const Dashboard = () => {
   return (
@@ -7,10 +8,10 @@ const Dashboard = () => {
         <h3 className="text-xl font-bold text-slate-600">
           Total Expense Dashboard
         </h3>
-        <dl className="mt-5 grid grid-cols-2 gap-5 sm:grid-cols-4">
+        <dl className="my-5 grid grid-cols-2 gap-5 sm:grid-cols-4">
           <div className="overflow-hidden p-3 rounded-lg ring-inset ring-green-200 ring-1 bg-green-50/50">
             <div className="absolute rounded-md bg-green-100 p-3">
-            <svg
+              <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="icon icon-tabler icon-tabler-currency-dollar stroke-green-500"
                 width="24"
@@ -94,6 +95,16 @@ const Dashboard = () => {
             </dd>
           </div>
         </dl>
+        <h3 className="text-xl font-bold text-slate-600 my-5">
+          Expense List of Month
+        </h3>
+
+        <AllExpense></AllExpense>
+        <button
+          className={`py-2 mt-10 px-3 rounded-lg bg-slate-500 hover:bg-slate-600 active:bg-slate-700 ease-in duration-75 text-sm font-semibold text-white hover:text-white flex items-center gap-2`}
+        >
+          Previous Month
+        </button>
       </div>
     </div>
   );
