@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -9,6 +9,10 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setBudget } from "../Redux/budgetSlice";
+import { setExpense } from "../Redux/expenseSlice";
+import { setCategories } from "../Redux/categorySlice";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
@@ -26,7 +30,10 @@ const Home = () => {
   const [activeNav, setActiveNav] = useState("");
   const location = useLocation();
   const { pathname } = location;
+  const dispatch = useDispatch();
   // console.log(pathname);
+ 
+
   return (
     <>
       {/*

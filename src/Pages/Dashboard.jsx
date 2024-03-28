@@ -16,6 +16,7 @@ const Dashboard = () => {
   const budget = useSelector(selectBudget);
   const expense = useSelector(selectExpense);
   const category = useSelector(selectCategory);
+
   useEffect(() => {
     const fetch1 = () =>
       fetch(`https://expense-treaker-server.vercel.app/budget`)
@@ -28,19 +29,20 @@ const Dashboard = () => {
         .then((res) => res.json())
         .then((data) => {
           dispatch(setExpense(data));
-          console.log(data);
-        });
-    const fetch3 = () =>
-      fetch(`https://expense-treaker-server.vercel.app/category`)
-        .then((res) => res.json())
-        .then((data) => {
-          dispatch(setCategories(data));
           // console.log(data);
         });
+    // const fetch3 = () =>
+    //   fetch(`https://expense-treaker-server.vercel.app/category`)
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       dispatch(setCategories(data));
+    //       // console.log(data);
+    //     });
     fetch1();
     fetch2();
-    fetch3();
+    // fetch3();
   }, []);
+  
 
   console.log(`category`, category);
 
@@ -82,9 +84,9 @@ const Dashboard = () => {
             <dd className="ml-14 flex items-baseline -mt-1">
               <p className="text-2xl truncate font-semibold text-slate-600">
                 {
-                  // budget?.find((b) => b?.month === month && b?.year === year)
-                  //   ?.totalBudget
-                  totalBudget
+                  budget?.find(
+                    (b) => b?.month === month && b?.year === year
+                  )?.totalBudget
                 }
               </p>
             </dd>
@@ -113,7 +115,7 @@ const Dashboard = () => {
             </dt>
             <dd className="ml-14 flex items-baseline -mt-1">
               <p className="text-2xl truncate font-semibold text-slate-600">
-                {totalExpense}
+                {expense?.reduce((sum, item) => sum + item.amount, 0)}
               </p>
             </dd>
           </div>
