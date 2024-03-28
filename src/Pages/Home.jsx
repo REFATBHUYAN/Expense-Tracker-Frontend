@@ -95,8 +95,8 @@ const Home = () => {
                     <div className="flex h-16 shrink-0 items-center">
                       <img
                         className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=green&shade=600"
-                        alt="Your Company"
+                        src="https://play-lh.googleusercontent.com/_IA1p-kzpnDyoutaCf9gxWME1fc76UpoLhtvm-5K3Aainu-U0ClZYS8ug-4stKjZu_s"
+                alt="Your Company"
                       />
                     </div>
                     <nav className="flex flex-1 flex-col">

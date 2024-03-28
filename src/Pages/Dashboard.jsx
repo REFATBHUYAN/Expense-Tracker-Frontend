@@ -1,7 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AllExpense from "../Components/AllExpense";
+import { useDispatch, useSelector } from "react-redux";
+import { selectBudget, setBudget } from "../Redux/budgetSlice";
+import moment from "moment";
+import { selectExpense, setExpense } from "../Redux/expenseSlice";
+import { selectCategory, setCategories } from "../Redux/categorySlice";
+
+const year = parseInt(moment(Date.now()).format("YYYY"));
+const month = parseInt(moment(Date.now()).format("MM"));
+// console.log(typeof(month), month)
 
 const Dashboard = () => {
+  // const [budget, setBudget] = useState([]);
+  const dispatch = useDispatch();
+  const budget = useSelector(selectBudget);
+  const expense = useSelector(selectExpense);
+  const category = useSelector(selectCategory);
+  useEffect(() => {
+    const fetch1 = () =>
+      fetch(`https://expense-treaker-server.vercel.app/budget`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(setBudget(data));
+        });
+    const fetch2 = () =>
+      fetch(`https://expense-treaker-server.vercel.app/expense`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(setExpense(data));
+          console.log(data);
+        });
+    const fetch3 = () =>
+      fetch(`https://expense-treaker-server.vercel.app/category`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(setCategories(data));
+          // console.log(data);
+        });
+    fetch1();
+    fetch2();
+    fetch3();
+  }, []);
+
+  console.log(`category`, category);
+
+  const totalBudget = budget?.find(
+    (b) => b?.month === month && b?.year === year
+  )?.totalBudget;
+  const totalExpense = expense?.reduce((sum, item) => sum + item.amount, 0);
+  const remainingBudget = totalBudget - totalExpense;
+
   return (
     <div>
       <div className="pt-8">
@@ -33,8 +81,11 @@ const Dashboard = () => {
             </dt>
             <dd className="ml-14 flex items-baseline -mt-1">
               <p className="text-2xl truncate font-semibold text-slate-600">
-                {/* {filterData.filter((d) => d.status === "Shipped").length} */}
-                10
+                {
+                  // budget?.find((b) => b?.month === month && b?.year === year)
+                  //   ?.totalBudget
+                  totalBudget
+                }
               </p>
             </dd>
           </div>
@@ -62,7 +113,7 @@ const Dashboard = () => {
             </dt>
             <dd className="ml-14 flex items-baseline -mt-1">
               <p className="text-2xl truncate font-semibold text-slate-600">
-                10
+                {totalExpense}
               </p>
             </dd>
           </div>
@@ -90,16 +141,16 @@ const Dashboard = () => {
             </dt>
             <dd className="ml-14 flex items-baseline -mt-1">
               <p className="text-2xl truncate font-semibold text-slate-600">
-                10
+                {remainingBudget}
               </p>
             </dd>
           </div>
         </dl>
         <h3 className="text-xl font-bold text-slate-600 my-5">
-          Expense List of Month
+          Expense List of Category
         </h3>
 
-        <AllExpense></AllExpense>
+        <AllExpense expense={expense} category={category}></AllExpense>
         <button
           className={`py-2 mt-10 px-3 rounded-lg bg-slate-500 hover:bg-slate-600 active:bg-slate-700 ease-in duration-75 text-sm font-semibold text-white hover:text-white flex items-center gap-2`}
         >

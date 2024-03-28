@@ -96,8 +96,8 @@ const data = [
 //   console.log(data);
   
 
-const AllExpense = () => {
-    const [allExpense, setAllExpense] = useState(data)
+const AllExpense = ({expense, category}) => {
+    // const [allExpense, setAllExpense] = useState(expense)
   return (
     <div>
       <div className="flow-root">
@@ -157,7 +157,7 @@ const AllExpense = () => {
                 </tr>
               </thead>
               <tbody className="bg-white">
-                {allExpense.map((item, index) => (
+                {expense?.map((item, index) => (
                   <tr
                     key={item.id}
                     className={index % 2 === 0 ? undefined : "bg-slate-50"}
@@ -169,17 +169,17 @@ const AllExpense = () => {
                       {item.amount}
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 text-sm text-slate-500">
-                      {item.category}
+                      {category?.find(c => c.id === item?.cateId)?.name}
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 text-sm text-slate-400">
                       {item.description}
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 text-sm text-slate-400">
-                      {item.date}
+                      {item.date.slice(0, 10)}
                     </td>
                     
                     <td className="whitespace-nowrap px-3 py-2 text-sm text-slate-400">
-                      {item.payment_method}
+                      {item.payment}
                       
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 text-sm text-slate-400">
@@ -192,7 +192,7 @@ const AllExpense = () => {
               </tbody>
             </table>
 
-            {allExpense.length === 0 && (
+            {expense?.length === 0 && (
               <div className="font-light text-slate-400 text-sm italic text-center w-full mx-auto">
                 <div className="px-3 py-4 border-t border-slate-200">
                   No orders found for this date!
