@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectBudget, updateBudget } from "../Redux/budgetSlice";
+import { selectBudget, setBudget, updateBudget } from "../Redux/budgetSlice";
 import { selectExpense } from "../Redux/expenseSlice";
 import { selectCategory, setCategories } from "../Redux/categorySlice";
 import moment from "moment";
@@ -24,6 +24,12 @@ const ExpenseCategories = () => {
   )?.id;
 
   useEffect(() => {
+    const fetch1 = () =>
+      fetch(`https://expense-treaker-server.vercel.app/budget`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(setBudget(data));
+        });
     
     const fetch3 = () =>
       fetch(`https://expense-treaker-server.vercel.app/category`)
@@ -35,6 +41,7 @@ const ExpenseCategories = () => {
         });
     
     fetch3();
+    fetch1();
   }, [handleSubmit]);
 
   const handleUpdateBudget = async () => {

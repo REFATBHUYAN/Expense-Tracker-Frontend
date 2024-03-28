@@ -148,15 +148,15 @@ const Home = () => {
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
-            <div className="flex h-16 shrink-0 items-center">
+            <div className="flex h-20 shrink-0 items-center">
               <img
                 className="h-8 w-auto"
                 src="https://play-lh.googleusercontent.com/_IA1p-kzpnDyoutaCf9gxWME1fc76UpoLhtvm-5K3Aainu-U0ClZYS8ug-4stKjZu_s"
                 alt="Your Company"
               />
-              <span className="ml-3 font-medium text-gray-900">
+              <h1 className="ml-3 font-5xl font-bold text-gray-900">
                 Expense Treaker
-              </span>
+              </h1>
             </div>
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">

@@ -5,6 +5,9 @@ import { selectBudget, setBudget } from "../Redux/budgetSlice";
 import moment from "moment";
 import { selectExpense, setExpense } from "../Redux/expenseSlice";
 import { selectCategory, setCategories } from "../Redux/categorySlice";
+import { DateRangePicker } from "react-date-range";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css";
 
 const year = parseInt(moment(Date.now()).format("YYYY"));
 const month = parseInt(moment(Date.now()).format("MM"));
@@ -16,6 +19,8 @@ const Dashboard = () => {
   const budget = useSelector(selectBudget);
   const expense = useSelector(selectExpense);
   const category = useSelector(selectCategory);
+  const [filterExpense, setFilterExpense] = useState([]);
+  const [clickedDate, setClickedDate] = useState(false);
 
   useEffect(() => {
     const fetch1 = () =>
@@ -28,21 +33,21 @@ const Dashboard = () => {
       fetch(`https://expense-treaker-server.vercel.app/expense`)
         .then((res) => res.json())
         .then((data) => {
+          setFilterExpense(data);
           dispatch(setExpense(data));
           // console.log(data);
         });
-    // const fetch3 = () =>
-    //   fetch(`https://expense-treaker-server.vercel.app/category`)
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       dispatch(setCategories(data));
-    //       // console.log(data);
-    //     });
+    const fetch3 = () =>
+      fetch(`https://expense-treaker-server.vercel.app/category`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(setCategories(data));
+          // console.log(data);
+        });
     fetch1();
     fetch2();
-    // fetch3();
+    fetch3();
   }, []);
-  
 
   console.log(`category`, expense);
 
@@ -51,6 +56,26 @@ const Dashboard = () => {
   )?.totalBudget;
   const totalExpense = expense?.reduce((sum, item) => sum + item.amount, 0);
   const remainingBudget = totalBudget - totalExpense;
+
+  // date range
+  const [selectionRange, setSelectionRange] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  });
+
+  const handleSelect = (ranges) => {
+    setSelectionRange(ranges.selection);
+    console.log(ranges.selection.endDate);
+    const startDate = new Date(ranges.selection.startDate);
+    const endDate = new Date(ranges.selection.endDate);
+    const items = expense.filter((item) => {
+      const itemDate = new Date(item.date);
+      return itemDate >= startDate && itemDate <= endDate;
+    });
+    setFilterExpense(items);
+    setClickedDate(false);
+  };
 
   return (
     <div>
@@ -84,9 +109,8 @@ const Dashboard = () => {
             <dd className="ml-14 flex items-baseline -mt-1">
               <p className="text-2xl truncate font-semibold text-slate-600">
                 {
-                  budget?.find(
-                    (b) => b?.month === month && b?.year === year
-                  )?.totalBudget
+                  budget?.find((b) => b?.month === month && b?.year === year)
+                    ?.totalBudget
                 }
               </p>
             </dd>
@@ -148,16 +172,33 @@ const Dashboard = () => {
             </dd>
           </div>
         </dl>
-        <h3 className="text-xl font-bold text-slate-600 my-5">
-          Expense List of Category
-        </h3>
+        <div className="flex justify-between">
+          <h3 className="text-xl font-bold text-slate-600 my-5">
+            Expense List of Category
+          </h3>
+          <div>
+            <div className={`relative mb-4 -mt-4`}>
+              {clickedDate ? (
+                <div className="absolute top-0 right-24">
+                  <DateRangePicker
+                    // className={`hidden`}
+                    ranges={[selectionRange]}
+                    onChange={handleSelect}
+                  />
+                </div>
+              ) : (
+                <button
+                  onClick={() => setClickedDate(true)}
+                  className="inline-flex justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 mt-10"
+                >
+                  Filter by Date
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
 
-        <AllExpense expense={expense} category={category}></AllExpense>
-        <button
-          className={`py-2 mt-10 px-3 rounded-lg bg-slate-500 hover:bg-slate-600 active:bg-slate-700 ease-in duration-75 text-sm font-semibold text-white hover:text-white flex items-center gap-2`}
-        >
-          Previous Month
-        </button>
+        <AllExpense expense={filterExpense} category={category}></AllExpense>
       </div>
     </div>
   );
