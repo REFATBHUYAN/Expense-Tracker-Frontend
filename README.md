@@ -1,4 +1,4 @@
-# Your Project Name
+# Daily Expense Tracker
 
 Daily Expense Tracker is a web application built using React, MySQL, Node.js, and Express.js. It helps users efficiently manage their daily expenses by providing a user-friendly interface for tracking, categorizing, and visualizing spending patterns. Users can filter their expenses by category and download expense data in CSV format. Using Date Range selection they can find expense of a range of dates.
 
