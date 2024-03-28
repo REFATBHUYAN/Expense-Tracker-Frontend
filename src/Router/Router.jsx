@@ -3,6 +3,7 @@ import Home from "../Pages/Home";
 import Dashboard from "../Pages/Dashboard";
 import Expense from "../Pages/Expense";
 import ExpenseCategories from "../Pages/ExpenseCategories";
+import Reports from "../Pages/Reports";
 
 const router = createBrowserRouter([
     {
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
         },
         {
           path: "/reports",
-          element: <div>Reports page</div>
+          element: <Reports></Reports>
         },
         
       ]

@@ -44,7 +44,7 @@ const Dashboard = () => {
   }, []);
   
 
-  console.log(`category`, category);
+  console.log(`category`, expense);
 
   const totalBudget = budget?.find(
     (b) => b?.month === month && b?.year === year
