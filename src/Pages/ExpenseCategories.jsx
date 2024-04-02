@@ -12,7 +12,7 @@ const ExpenseCategories = () => {
   const budget = useSelector(selectBudget);
   const category = useSelector(selectCategory);
   const [updatedBudget, setUpdatedBudget] = useState(null);
-  const [categoryName, setCategoryName] = useState('');
+  const [categoryName, setCategoryName] = useState("");
   const [categoryBudget, setCategoryBudget] = useState(0);
   const [handleSubmit, setHandleSubmit] = useState(false);
   const dispatch = useDispatch();
@@ -28,16 +28,15 @@ const ExpenseCategories = () => {
         .then((data) => {
           dispatch(setBudget(data));
         });
-    
+
     const fetch3 = () =>
       fetch(`https://expense-treaker-server.vercel.app/category`)
         .then((res) => res.json())
         .then((data) => {
           dispatch(setCategories(data));
-          setHandleSubmit(false)
-         
+          setHandleSubmit(false);
         });
-    
+
     fetch3();
     fetch1();
   }, [handleSubmit]);
@@ -54,7 +53,6 @@ const ExpenseCategories = () => {
           body: JSON.stringify({ totalBudget: updatedBudget }),
         }
       );
-      
 
       if (response.ok) {
         dispatch(
@@ -89,8 +87,6 @@ const ExpenseCategories = () => {
       );
 
       if (response.ok) {
-        
-
         toast.success("Total Budget Set Successfully ", {
           position: "top-right",
           autoClose: 4000,
@@ -104,21 +100,22 @@ const ExpenseCategories = () => {
     }
   };
 
-  const totalCategoryBudget = category?.reduce((sum, item) => sum + item.budget, 0);
+  const totalCategoryBudget = category?.reduce(
+    (sum, item) => sum + item.budget,
+    0
+  );
   const totalBudget = budget?.find(
     (b) => b?.month === month && b?.year === year
   )?.totalBudget;
 
-
-  const handleAddCategory = async () =>{
-    if((totalCategoryBudget + categoryBudget) > totalBudget){
+  const handleAddCategory = async () => {
+    if (totalCategoryBudget + categoryBudget > totalBudget) {
       toast.error("Your Budget is High", {
         position: "top-right",
         autoClose: 4000,
         theme: "dark",
       });
-    }
-    else{
+    } else {
       try {
         const response = await fetch(
           `https://expense-treaker-server.vercel.app/category`,
@@ -127,13 +124,15 @@ const ExpenseCategories = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ budget: categoryBudget, name:categoryName }),
+            body: JSON.stringify({
+              budget: categoryBudget,
+              name: categoryName,
+            }),
           }
         );
-        
-  
+
         if (response.ok) {
-          setHandleSubmit(true)
+          setHandleSubmit(true);
           toast.success("New Category Added Successfully ", {
             position: "top-right",
             autoClose: 4000,
@@ -146,9 +145,7 @@ const ExpenseCategories = () => {
         console.error("Error to set total budget:", error);
       }
     }
-  }
-
-  
+  };
 
   return (
     <div>
@@ -227,12 +224,12 @@ const ExpenseCategories = () => {
                     <path d="M12 3v3m0 12v3" />
                   </svg>
                 </div>
-                <dt className="ml-14 truncate text-sm font-medium text-slate-400">
-                  {cate.name}
+                <dt className="ml-14 text-2xl truncate font-semibold text-slate-600">
+                  {`${cate.name}`}
                 </dt>
                 <dd className="ml-14 flex items-baseline -mt-1">
-                  <p className="text-2xl truncate font-semibold text-slate-600">
-                    {cate.budget}
+                  <p className=" truncate text-sm font-medium text-slate-400">
+                    {`Budget: ${cate.budget}`}
                   </p>
                 </dd>
               </div>
@@ -281,7 +278,7 @@ const ExpenseCategories = () => {
             <div className="mt-6 text-center">
               <button
                 onClick={handleAddCategory}
-                disabled={categoryBudget === 0 || categoryName === ''}
+                disabled={categoryBudget === 0 || categoryName === ""}
                 className="inline-flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
               >
                 Save
