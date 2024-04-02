@@ -1,19 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
-import { useSelector } from "react-redux";
-import { selectCategory } from "../Redux/categorySlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCategory, setCategories } from "../Redux/categorySlice";
 import toast, { Toaster } from "react-hot-toast";
 
 const Expense = () => {
   const category = useSelector(selectCategory);
+  const defaultId = category.length > 0 && category[0].id ;
+  const dispatch = useDispatch();
   const [exAmount, setExAmount] = useState(0);
-  const [cateId, setCateId] = useState();
+  const [cateId, setCateId] = useState(defaultId);
   const [description, setDescription] = useState("");
   const [payment, setPayment] = useState("");
   const [location, setLocation] = useState("");
 
+  useEffect(() => {
+    
+    const fetch3 = () =>
+      fetch(`https://expense-treaker-server.vercel.app/category`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(setCategories(data));
+          // console.log(data);
+        });
+    
+    fetch3();
+  }, []);
+
   const handleExpenseAdd = async () =>{
     console.log(exAmount, cateId, description, payment, location)
+    if(exAmount === 0 || exAmount.length === 0 || description === '' || location === '' || payment === ''){
+      return alert("Please enter valid Information");
+    }
     const expenseItem = {
         amount: exAmount,
         cateId: cateId,
@@ -48,6 +66,7 @@ const Expense = () => {
         console.error("Failed to New Expense Item:", error);
       }
   }
+  // console.log("categoryid from expens", defaultId);
 
   return (
     <>

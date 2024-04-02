@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectBudget, setBudget, updateBudget } from "../Redux/budgetSlice";
-import { selectExpense } from "../Redux/expenseSlice";
 import { selectCategory, setCategories } from "../Redux/categorySlice";
 import moment from "moment";
 import toast, { Toaster } from "react-hot-toast";
@@ -11,7 +10,6 @@ const month = parseInt(moment(Date.now()).format("MM"));
 
 const ExpenseCategories = () => {
   const budget = useSelector(selectBudget);
-  const expense = useSelector(selectExpense);
   const category = useSelector(selectCategory);
   const [updatedBudget, setUpdatedBudget] = useState(null);
   const [categoryName, setCategoryName] = useState('');
@@ -37,7 +35,7 @@ const ExpenseCategories = () => {
         .then((data) => {
           dispatch(setCategories(data));
           setHandleSubmit(false)
-          // console.log(data);
+         
         });
     
     fetch3();
@@ -150,15 +148,13 @@ const ExpenseCategories = () => {
     }
   }
 
-  console.log("update budget", typeof(categoryBudget), typeof(totalCategoryBudget), typeof(totalBudget));
+  
 
-
-  console.log(typeof budgetId);
   return (
     <div>
       <div className="overflow-hidden p-3 rounded-lg ring-inset ring-green-200 ring-1 bg-green-50/50 mb-5">
         <h1 className="text-2xl font-semibold text-gray-900 my-5">
-          Add your monthly Budget
+          Add or Update your monthly Budget
         </h1>
         <div>
           <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">

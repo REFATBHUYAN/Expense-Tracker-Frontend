@@ -4,11 +4,12 @@ import Dashboard from "../Pages/Dashboard";
 import Expense from "../Pages/Expense";
 import ExpenseCategories from "../Pages/ExpenseCategories";
 import Reports from "../Pages/Reports";
+import { Providers } from "../Redux/Provider";
 
 const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home></Home>,
+      element: <Providers><Home></Home></Providers>,
       children:[
         {
           path: "/",

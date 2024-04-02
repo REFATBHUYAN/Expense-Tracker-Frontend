@@ -1,12 +1,12 @@
-import React, { Fragment, useState } from "react";
-import { useSelector } from "react-redux";
-import { selectCategory } from "../Redux/categorySlice";
+import React, { Fragment, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCategory, setCategories } from "../Redux/categorySlice";
 import { Menu, Transition } from "@headlessui/react";
-import { selectExpense } from "../Redux/expenseSlice";
+import { selectExpense, setExpense } from "../Redux/expenseSlice";
 import AllExpense from "../Components/AllExpense";
 import ExportDataAsCsv from "../Components/ExportDataAsCsv";
 import { DateRangePicker } from "react-date-range";
-import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/styles.css"; 
 import "react-date-range/dist/theme/default.css";
 
 function classNames(...classes) {
@@ -16,14 +16,38 @@ function classNames(...classes) {
 const Reports = () => {
   const category = useSelector(selectCategory);
   const expense = useSelector(selectExpense);
+  const dispatch = useDispatch();
   const [filterExpense, setFilterExpense] = useState(expense);
   const [filterCategory, setFilterCategory] = useState(0);
   const [clickedDate, setClickedDate] = useState(false);
   const handleFilter = (id) => {
     setFilterCategory(id);
     setFilterExpense(expense.filter((e) => e.cateId === id));
-    console.log(id);
+    // console.log(id);
   };
+
+
+  useEffect(() => {
+    const fetch2 = () =>
+      fetch(`https://expense-treaker-server.vercel.app/expense`)
+        .then((res) => res.json())
+        .then((data) => {
+          setFilterExpense(data);
+          dispatch(setExpense(data));
+          // console.log(data);
+        });
+    const fetch3 = () =>
+      fetch(`https://expense-treaker-server.vercel.app/category`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(setCategories(data));
+          // console.log(data);
+        });
+   
+    fetch2();
+    fetch3();
+  }, []);
+
   //   date picker
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
@@ -55,7 +79,10 @@ const Reports = () => {
                 // className={`hidden`}
                 ranges={[selectionRange]}
                 onChange={handleSelect}
-              /></div> : <button onClick={() => setClickedDate(true)} className="inline-flex justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 mt-10">Filter by Date</button>
+              /></div> : <button onClick={() => setClickedDate(true)} 
+              // className="inline-flex justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 mt-10"
+              className="group inline-flex justify-center w-full rounded-lg py-2 px-3 border-0 border-slate-300 text-left text-sm font-medium text-slate-600 ring-1 ring-inset ring-slate-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 gap-2 mt-10"
+              >Filter by Date</button>
             }
         </div>
 
@@ -63,19 +90,19 @@ const Reports = () => {
           <div>
             <Menu.Button className="group inline-flex justify-center w-full rounded-lg py-2 px-3 border-0 border-slate-300 text-left text-sm font-medium text-slate-600 ring-1 ring-inset ring-slate-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 gap-2">
               {filterCategory === 0
-                ? "Filter"
+                ? "Filter By Category"
                 : category?.find((c) => c.id === filterCategory)?.name}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="icon icon-tabler icon-tabler-filter-cog text-slate-400"
+                className="icon icon-tabler icon-tabler-filter-cog text-slate-400"
                 width="20"
                 height="20"
                 viewBox="0 0 24 24"
-                stroke-width="2"
+                strokeWidth="2"
                 stroke="currentColor"
                 fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M12 20l-3 1v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v1.5" />

@@ -7,7 +7,7 @@ const AllExpense = ({expense, category}) => {
     // const [allExpense, setAllExpense] = useState(expense)
   return (
     <div>
-      <div className="flow-root">
+      <div className="flow-root mt-5">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full align-middle sm:px-6 lg:px-8">
             <table className="min-w-full divide-y divide-slate-200">
@@ -17,7 +17,7 @@ const AllExpense = ({expense, category}) => {
                     scope="col"
                     className="py-3 pl-4 pr-3 text-left text-xs font-medium uppercase tracking-wide text-slate-600 sm:pl-3"
                   >
-                    Id
+                    #
                   </th>
                   <th
                     scope="col"

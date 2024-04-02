@@ -9,10 +9,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setBudget } from "../Redux/budgetSlice";
-import { setExpense } from "../Redux/expenseSlice";
-import { setCategories } from "../Redux/categorySlice";
+
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
@@ -30,9 +27,7 @@ const Home = () => {
   const [activeNav, setActiveNav] = useState("");
   const location = useLocation();
   const { pathname } = location;
-  const dispatch = useDispatch();
-  // console.log(pathname);
- 
+
 
   return (
     <>
@@ -103,7 +98,7 @@ const Home = () => {
                       <img
                         className="h-8 w-auto"
                         src="https://play-lh.googleusercontent.com/_IA1p-kzpnDyoutaCf9gxWME1fc76UpoLhtvm-5K3Aainu-U0ClZYS8ug-4stKjZu_s"
-                alt="Your Company"
+                        alt="Your Company"
                       />
                     </div>
                     <nav className="flex flex-1 flex-col">

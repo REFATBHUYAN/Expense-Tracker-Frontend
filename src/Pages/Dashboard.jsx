@@ -6,21 +6,20 @@ import moment from "moment";
 import { selectExpense, setExpense } from "../Redux/expenseSlice";
 import { selectCategory, setCategories } from "../Redux/categorySlice";
 import { DateRangePicker } from "react-date-range";
-import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
 const year = parseInt(moment(Date.now()).format("YYYY"));
 const month = parseInt(moment(Date.now()).format("MM"));
-// console.log(typeof(month), month)
 
 const Dashboard = () => {
-  // const [budget, setBudget] = useState([]);
   const dispatch = useDispatch();
   const budget = useSelector(selectBudget);
   const expense = useSelector(selectExpense);
   const category = useSelector(selectCategory);
   const [filterExpense, setFilterExpense] = useState([]);
   const [clickedDate, setClickedDate] = useState(false);
+
 
   useEffect(() => {
     const fetch1 = () =>
@@ -49,13 +48,20 @@ const Dashboard = () => {
     fetch3();
   }, []);
 
-  console.log(`category`, expense);
+  // const totalBudget = budget?.find(
+  //   (b) => b?.month === month && b?.year === year
+  // )?.totalBudget;
+  const monthlyExpense = expense?.filter((ex) => {
+    const date = new Date(ex.date);
 
-  const totalBudget = budget?.find(
-    (b) => b?.month === month && b?.year === year
-  )?.totalBudget;
-  const totalExpense = expense?.reduce((sum, item) => sum + item.amount, 0);
-  const remainingBudget = totalBudget - totalExpense;
+    const yearEx = date.getFullYear();
+    const monthEx = date.getMonth() + 1;
+    return yearEx == year && monthEx == month;
+  });
+  // setCurrentMonthExpense(monthlyExpense);
+  // console.log("expense monthly list", monthlyExpense);
+  // const totalExpense = expense?.reduce((sum, item) => sum + item.amount, 0);
+  // const remainingBudget = totalBudget - parseInt(monthlyExpense);
 
   // date range
   const [selectionRange, setSelectionRange] = useState({
@@ -66,7 +72,7 @@ const Dashboard = () => {
 
   const handleSelect = (ranges) => {
     setSelectionRange(ranges.selection);
-    console.log(ranges.selection.endDate);
+    // console.log(ranges.selection.endDate);
     const startDate = new Date(ranges.selection.startDate);
     const endDate = new Date(ranges.selection.endDate);
     const items = expense.filter((item) => {
@@ -83,7 +89,7 @@ const Dashboard = () => {
         <h3 className="text-xl font-bold text-slate-600">
           Total Expense Dashboard
         </h3>
-        <dl className="my-5 grid grid-cols-2 gap-5 sm:grid-cols-4">
+        <dl className="my-5 grid grid-cols-2 gap-5 sm:grid-cols-3">
           <div className="overflow-hidden p-3 rounded-lg ring-inset ring-green-200 ring-1 bg-green-50/50">
             <div className="absolute rounded-md bg-green-100 p-3">
               <svg
@@ -104,7 +110,7 @@ const Dashboard = () => {
               </svg>
             </div>
             <dt className="ml-14 truncate text-sm font-medium text-slate-400">
-              Budget
+              Total Budget of this month
             </dt>
             <dd className="ml-14 flex items-baseline -mt-1">
               <p className="text-2xl truncate font-semibold text-slate-600">
@@ -135,11 +141,11 @@ const Dashboard = () => {
               </svg>
             </div>
             <dt className="ml-14 truncate text-sm font-medium text-slate-400">
-              Total Expense
+              Total Expense of this month
             </dt>
             <dd className="ml-14 flex items-baseline -mt-1">
               <p className="text-2xl truncate font-semibold text-slate-600">
-                {expense?.reduce((sum, item) => sum + item.amount, 0)}
+                {monthlyExpense?.reduce((sum, item) => sum + item.amount, 0)}
               </p>
             </dd>
           </div>
@@ -163,11 +169,13 @@ const Dashboard = () => {
               </svg>
             </div>
             <dt className="ml-14 truncate text-sm font-medium text-slate-400">
-              Remaining Budget
+              Remaining Budget of this month
             </dt>
             <dd className="ml-14 flex items-baseline -mt-1">
               <p className="text-2xl truncate font-semibold text-slate-600">
-                {remainingBudget}
+                {budget?.find((b) => b?.month === month && b?.year === year)
+                  ?.totalBudget -
+                  monthlyExpense?.reduce((sum, item) => sum + item.amount, 0)}
               </p>
             </dd>
           </div>
@@ -181,7 +189,6 @@ const Dashboard = () => {
               {clickedDate ? (
                 <div className="absolute top-0 right-24">
                   <DateRangePicker
-                    // className={`hidden`}
                     ranges={[selectionRange]}
                     onChange={handleSelect}
                   />
@@ -189,7 +196,7 @@ const Dashboard = () => {
               ) : (
                 <button
                   onClick={() => setClickedDate(true)}
-                  className="inline-flex justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 mt-10"
+                  className="group inline-flex justify-center w-full rounded-lg py-2 px-3 border-0 border-slate-300 text-left text-sm font-medium text-slate-600 ring-1 ring-inset ring-slate-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 mt-10  gap-2"
                 >
                   Filter by Date
                 </button>
